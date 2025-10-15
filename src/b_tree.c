@@ -4,7 +4,7 @@
 void insert_key(Node* node,void* data,Comparison (*compare_data_foo)(void*,void*)){
 
     int i = node->keys_count-1;
-    while(i >=0 && compare_data_foo(node->keys[i],data) == LOWER){
+    while(i >=0 && compare_data_foo(node->keys[i],data) == HIGHER){
         node->keys[i+1] = node->keys[i];
         i--;
     }
@@ -112,7 +112,6 @@ void split_node(Node** node,int child_index,Comparison (*compare_data_foo)(void*
     Node* full_node = NULL;
     Node* new_node = create_node((*node)->min_degree,NULL,NULL,destroy_data_foo);
     int T = (*node)->min_degree;
-    int i = 0;
 
     //if node is root create new root and proceed to split old node.
     if(child_index < 0){
@@ -188,7 +187,7 @@ Node* insert_in_tree(Node** parent,int child_index,int min_degree,void* data,Com
     }
     else{ //intermediary node
         int i = (*child)->keys_count-1;
-        while(i >= 0 && compare_data_foo((*child)->keys[i],data) == LOWER){
+        while(i >= 0 && compare_data_foo((*child)->keys[i],data) == HIGHER){
             i--;
         }
         i++;

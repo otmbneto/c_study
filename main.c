@@ -19,10 +19,10 @@ Comparison compare_data(void* node_data,void* new_data){
     if(node_data == NULL || new_data == NULL)return 0;
 
     if(*(int*)node_data > *(int*)new_data){
-        return LOWER;
+        return HIGHER;
     }
     else if(*(int*)node_data < *(int*)new_data){
-        return HIGHER;
+        return LOWER;
     }
     else{
         return EQUAL;
