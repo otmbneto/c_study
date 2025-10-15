@@ -1,45 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
-#define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
-typedef enum {EQUAL,LOWER,HIGHER} Comparison;
-
-void print_data(void* data){
-    if(data != NULL){
-        printf("%i ",*(int*)data);
-    }
-}
-
-void destroy_data(void* data){
-    if(data != NULL){
-        free((int*)data);
-    }
-}
-
-Comparison compare_data(void* node_data,void* new_data){
-
-    if(node_data == NULL || new_data == NULL)return 0;
-
-    if(*(int*)node_data > *(int*)new_data){
-        return LOWER;
-    }
-    else if(*(int*)node_data < *(int*)new_data){
-        return HIGHER;
-    }
-    else{
-        return EQUAL;
-    }
-}
-
-typedef struct Node{
-
-    void** keys;
-    int keys_count;
-    int min_degree;
-    int children_count;
-    struct Node** children;
-
-} Node;
+#include "../include/b_tree.h"
 
 //function assumes enough space for the new insertion
 void insert_key(Node* node,void* data,Comparison (*compare_data_foo)(void*,void*)){
@@ -102,7 +61,7 @@ void destroy_keys(Node* node,void (*destroy_data_foo)(void*)){
 void destroy_node(Node** node,void (*destroy_data_foo)(void*)){
 
     if(node != NULL){
-        destroy_keys(*node,destroy_data);
+        destroy_keys(*node,destroy_data_foo);
         free((*node)->keys);
         if((*node)->children != NULL){
             for(int i = 0;i < (*node)->children_count;i++){
@@ -116,7 +75,7 @@ void destroy_node(Node** node,void (*destroy_data_foo)(void*)){
     }
 }
 
-Node* create_node(int min_degree,void* data,Comparison (*compare_data_foo)(void*,void*)){
+Node* create_node(int min_degree,void* data,Comparison (*compare_data_foo)(void*,void*),void (*destroy_data_foo)(void*)){
 
     Node* new_node = malloc(sizeof(Node));
     if(new_node != NULL){
@@ -131,7 +90,7 @@ Node* create_node(int min_degree,void* data,Comparison (*compare_data_foo)(void*
             new_node->children_count = 0;
             new_node->children = calloc(2*min_degree, sizeof(Node*));
             if(new_node->children == NULL){
-                destroy_keys(new_node,destroy_data);
+                destroy_keys(new_node,destroy_data_foo);
                 free(new_node);
                 new_node = NULL;
             }
@@ -149,15 +108,15 @@ Node* search_node(Node* node,void* data,Comparison (*compare_data_foo)(void*,voi
 
 
 //if child index is less than 0 node is the root;otherwise is a child.
-void split_node(Node** node,int child_index,Comparison (*compare_data_foo)(void*,void*)){
+void split_node(Node** node,int child_index,Comparison (*compare_data_foo)(void*,void*),void (*destroy_data_foo)(void*)){
     Node* full_node = NULL;
-    Node* new_node = create_node((*node)->min_degree,NULL,NULL);
+    Node* new_node = create_node((*node)->min_degree,NULL,NULL,destroy_data_foo);
     int T = (*node)->min_degree;
     int i = 0;
 
     //if node is root create new root and proceed to split old node.
     if(child_index < 0){
-        Node* new_root = create_node((*node)->min_degree,NULL,NULL);
+        Node* new_root = create_node((*node)->min_degree,NULL,NULL,destroy_data_foo);
         if(new_root == NULL) return;
         new_root->children[0] = *node;
         *node = new_root;
@@ -201,12 +160,12 @@ void split_node(Node** node,int child_index,Comparison (*compare_data_foo)(void*
 }
 
 //TODO: correct the recursion
-Node* insert_in_tree(Node** parent,int child_index,int min_degree,void* data,Comparison (*compare_data_foo)(void*,void*)){
+Node* insert_in_tree(Node** parent,int child_index,int min_degree,void* data,Comparison (*compare_data_foo)(void*,void*),void (*destroy_data_foo)(void*)){
 
     Node** child = NULL;
     //init tree
     if(*parent == NULL){
-        return create_node(min_degree,data,compare_data_foo);
+        return create_node(min_degree,data,compare_data_foo,destroy_data_foo);
     }
 
     //parent is root
@@ -222,7 +181,7 @@ Node* insert_in_tree(Node** parent,int child_index,int min_degree,void* data,Com
 
         //if it is full,split it.
         if((*child)->keys_count == (2*(*child)->min_degree - 1)){
-            split_node(parent,child_index,compare_data_foo);
+            split_node(parent,child_index,compare_data_foo,destroy_data_foo);
         }
 
         insert_key(*child,data,compare_data_foo);
@@ -234,18 +193,12 @@ Node* insert_in_tree(Node** parent,int child_index,int min_degree,void* data,Com
         }
         i++;
 
-        insert_in_tree(child,i,(*child)->min_degree,data,compare_data_foo);
+        insert_in_tree(child,i,(*child)->min_degree,data,compare_data_foo,destroy_data_foo);
         if((*child)->keys_count == (2*(*child)->min_degree - 1)){
-            split_node(parent,child_index,compare_data_foo);
+            split_node(parent,child_index,compare_data_foo,destroy_data_foo);
         }
 
     }
 
     return *child;
-}
-
-int main(){
-
-
-    return 0;
 }
