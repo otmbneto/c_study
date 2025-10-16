@@ -104,6 +104,10 @@ Node* create_node(int min_degree,void* data,Comparison (*compare_data_foo)(void*
 
 Node* search_node(Node* node,void* data,Comparison (*compare_data_foo)(void*,void*)){
     //TODO
+
+
+
+    return NULL;
 }
 
 
@@ -176,26 +180,27 @@ Node* insert_in_tree(Node** parent,int child_index,int min_degree,void* data,Com
     }
 
     //leaf node
-    if((*child)->children_count == 0){
+    if((**child).children_count == 0){
 
         //if it is full,split it.
-        if((*child)->keys_count == (2*(*child)->min_degree - 1)){
+        if((**child).keys_count == (2*(**child).min_degree - 1)){
             split_node(parent,child_index,compare_data_foo,destroy_data_foo);
         }
 
         insert_key(*child,data,compare_data_foo);
     }
     else{ //intermediary node
-        int i = (*child)->keys_count-1;
-        while(i >= 0 && compare_data_foo((*child)->keys[i],data) == HIGHER){
+        int i = (**child).keys_count-1;
+        while(i >= 0 && compare_data_foo((**child).keys[i],data) == HIGHER){
             i--;
         }
         i++;
 
-        insert_in_tree(child,i,(*child)->min_degree,data,compare_data_foo,destroy_data_foo);
-        if((*child)->keys_count == (2*(*child)->min_degree - 1)){
+        if((**child).keys_count == (2*(**child).min_degree - 1)){
             split_node(parent,child_index,compare_data_foo,destroy_data_foo);
         }
+
+        insert_in_tree(child,i,(**child).min_degree,data,compare_data_foo,destroy_data_foo);
 
     }
 
