@@ -212,5 +212,5 @@ Node* insert_in_tree(Node** parent,int child_index,int min_degree,void* data,Com
 
     }
 
-    return *child;
+    return *parent;
 }
