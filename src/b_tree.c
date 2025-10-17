@@ -153,7 +153,7 @@ void split_node(Node** node,int child_index,Comparison (*compare_data_foo)(void*
 
     //send the M-1 key to the parent
     for (int i = (*node)->keys_count - 1; i >= child_index; i--) {
-            (*node)->keys[i+1] = (*node)->keys[i];
+        (*node)->keys[i+1] = (*node)->keys[i];
     }
     (*node)->keys[child_index] = full_node->keys[T-1];
     full_node->keys[T-1] = NULL;
@@ -185,6 +185,14 @@ Node* insert_in_tree(Node** parent,int child_index,int min_degree,void* data,Com
         //if it is full,split it.
         if((**child).keys_count == (2*(**child).min_degree - 1)){
             split_node(parent,child_index,compare_data_foo,destroy_data_foo);
+            //special case for when we split the root
+            if(child_index < 0){
+                child_index = 0;
+            }
+            if(compare_data_foo((*parent)->keys[child_index], data) == LOWER) {
+                //child_index++;
+                child = &(*parent)->children[++child_index];
+            }
         }
 
         insert_key(*child,data,compare_data_foo);
