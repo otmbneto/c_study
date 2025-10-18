@@ -24,7 +24,6 @@ void* remove_key(Node* node,void* data,Comparison (*compare_data_foo)(void*,void
 void destroy_keys(Node* node,void (*destroy_data_foo)(void*));
 void destroy_node(Node** node,void (*destroy_data_foo)(void*));
 Node* create_node(int min_degree,void* data,Comparison (*compare_data_foo)(void*,void*),void (*destroy_data_foo)(void*));
-Node* search_node(Node* node,void* data,Comparison (*compare_data_foo)(void*,void*));
 void split_node(Node** node,int child_index,Comparison (*compare_data_foo)(void*,void*),void (*destroy_data_foo)(void*));
 Node* insert_in_tree(Node** parent,int child_index,int min_degree,void* data,Comparison (*compare_data_foo)(void*,void*),void (*destroy_data_foo)(void*));
 

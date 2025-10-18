@@ -102,19 +102,9 @@ Node* create_node(int min_degree,void* data,Comparison (*compare_data_foo)(void*
     return new_node;
 }
 
-Node* search_node(Node* node,void* data,Comparison (*compare_data_foo)(void*,void*)){
-    //TODO
-
-
-
-    return NULL;
-}
-
-
 //if child index is less than 0 node is the root;otherwise is a child.
 void split_node(Node** node,int child_index,Comparison (*compare_data_foo)(void*,void*),void (*destroy_data_foo)(void*)){
     Node* full_node = NULL;
-    Node* new_node = create_node((*node)->min_degree,NULL,NULL,destroy_data_foo);
     int T = (*node)->min_degree;
 
     //if node is root create new root and proceed to split old node.
@@ -126,6 +116,7 @@ void split_node(Node** node,int child_index,Comparison (*compare_data_foo)(void*
         child_index++;
     }
 
+    Node* new_node = create_node((*node)->min_degree,NULL,NULL,destroy_data_foo);
     full_node = (*node)->children[child_index];
     //insert the second half of the keys into the new node;remove it from og node
     for(int j=0;j < T-1;j++){

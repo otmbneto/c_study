@@ -31,11 +31,6 @@ Comparison compare_data(void* node_data,void* new_data){
 
 int main()
 {
-    Node* root = NULL;
-    for (int k = 0; k < 15; k++) {
-        int* val = malloc(sizeof(int));
-        *val = k;
-        root = insert_in_tree(&root, -1, 3, val, compare_data,destroy_data);
-    }
+
     return 0;
 }
