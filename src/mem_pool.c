@@ -8,6 +8,20 @@ void pool_destroy(MEMPOOL* pool){
     free(pool);
 }
 
+void pool_reset(MEMPOOL* pool){
+
+    if(pool == NULL || pool->memory == NULL || pool->blocks == NULL) return;
+
+    while(!is_empty(pool->blocks)){
+        pop(&pool->blocks);
+    }
+
+    for (int i = 0; i < pool->block_count; i++) {
+        void* block = (char*)pool->memory + i * pool->block_size;
+        push(&pool->blocks, block);
+    }
+}
+
 MEMPOOL* pool_init(int block_size, int block_count){
 
     MEMPOOL* mem_pool = malloc(sizeof(MEMPOOL));
@@ -23,11 +37,7 @@ MEMPOOL* pool_init(int block_size, int block_count){
                 free(mem_pool);
             }
             else{
-                //push each block pointer into the stack.
-                for (int i = 0; i < block_count; i++) {
-                    void* block = (char*)mem_pool->memory + i * block_size;
-                    push(&mem_pool->blocks, block);
-                }
+                pool_reset(mem_pool);
             }
         }
         else{
