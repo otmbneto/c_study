@@ -14,6 +14,8 @@ typedef struct MEMPOOL{
 
 } MEMPOOL;
 
+void pool_destroy(MEMPOOL* pool);
+void pool_reset(MEMPOOL* pool);
 MEMPOOL* pool_init(int block_size, int block_count);
 void* pool_alloc(MEMPOOL* pool);
 void pool_free(MEMPOOL* pool, void* ptr);
