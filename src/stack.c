@@ -41,9 +41,7 @@ int pop(STACK** top){
 }
 
 int is_empty(STACK* top){
-
     return top == NULL;
-
 }
 
 void free_stack(STACK** top){

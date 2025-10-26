@@ -3,7 +3,6 @@
 #include "../include/mem_pool.h"
 
 void pool_destroy(MEMPOOL* pool){
-
     free_stack(&pool->blocks);
     free(pool->memory);
     free(pool);
@@ -18,6 +17,7 @@ MEMPOOL* pool_init(int block_size, int block_count){
         mem_pool->memory = malloc(block_size*block_count);
         if(mem_pool->memory != NULL){
             mem_pool->blocks = malloc(sizeof(STACK));
+            mem_pool->blocks->next = NULL;
             if(mem_pool->blocks == NULL){
                 free(mem_pool->memory);
                 free(mem_pool);
