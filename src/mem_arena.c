@@ -21,7 +21,13 @@ MEMARENA* init_arena(size_t mem_size){
 void* alloc_arena(MEMARENA* arena,size_t block_size){
     void* block = NULL;
     if(arena != NULL && arena->base != NULL){
-        block = arena->base + arena->offset;
+
+        if(arena->offset + block_size > arena->mem_size){
+            printf("ERROR: Arena overflow\n");
+            return NULL;
+        }
+
+        block = (char*)arena->base + arena->offset;
         arena->offset += block_size;
     }
     return block;
