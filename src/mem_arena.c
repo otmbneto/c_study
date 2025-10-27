@@ -43,5 +43,6 @@ void free_arena(MEMARENA** arena){
     if(*arena != NULL && (*arena)->base != NULL){
         free((*arena)->base);
         free(*arena);
+        *arena = NULL;
     }
 }
