@@ -3,12 +3,12 @@
 
 typedef struct MEMARENA{
     void* base;
-    int offset;
-    int mem_size;
+    size_t offset;
+    size_t mem_size;
 } MEMARENA;
 
-MEMARENA* init_arena(int mem_size);
-void* alloc_arena(MEMARENA* arena,int block_size);
+MEMARENA* init_arena(size_t mem_size);
+void* alloc_arena(MEMARENA* arena,size_t block_size);
 void reset_arena(MEMARENA* arena);
 void free_arena(MEMARENA** arena);
 
