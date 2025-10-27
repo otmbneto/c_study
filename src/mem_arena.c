@@ -46,3 +46,9 @@ void free_arena(MEMARENA** arena){
         *arena = NULL;
     }
 }
+
+size_t remaining_arena(MEMARENA* arena){
+
+    return arena->mem_size - arena->offset;
+
+}

@@ -11,5 +11,6 @@ MEMARENA* init_arena(size_t mem_size);
 void* alloc_arena(MEMARENA* arena,size_t block_size);
 void reset_arena(MEMARENA* arena);
 void free_arena(MEMARENA** arena);
+size_t remaining_arena(MEMARENA* arena);
 
 #endif // MEM_ARENA_H_INCLUDED
